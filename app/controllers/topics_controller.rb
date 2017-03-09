@@ -28,7 +28,7 @@ class TopicsController < ApplicationController
 
     respond_to do |format|
       if @topic.save
-        format.html { redirect_to @topic, notice: 'Topic was successfully created.' }
+        format.html { redirect_to topics_path, notice: 'Topic was successfully created.' }
         format.json { render :show, status: :created, location: @topic }
       else
         format.html { render :new }
@@ -60,6 +60,12 @@ class TopicsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def upvote
+      @topic = Topic.find(params[:id])
+      @topic.votes.create
+      redirect_to(topics_path)
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -72,9 +78,5 @@ class TopicsController < ApplicationController
       params.require(:topic).permit(:title, :description)
     end
     
-    def upvote
-      @topic = Topic.find(params[:id])
-      @topic.votes.create
-      redirect_to(topics_path)
-    end
+    
 end
